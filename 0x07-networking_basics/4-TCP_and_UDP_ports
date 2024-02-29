@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Run netstat with sudo to get full details including process information
-# Filter the output to show only TCP and UDP listening sockets
-# Use awk to display the relevant fields: Proto, Local Address, Foreign Address, State, PID/Program name
-sudo netstat -tuln | grep -E '^(tcp|udp)' | awk '{print $1, $4, $5, $6, $7}' | sed 's/\//\t/g'
+# A bash script that displays listening ports:
+# It only shows listenig sockets
+# It shows the PID name of the
+# program to which each socket belongs`
+sudo netstat -l -p
 
