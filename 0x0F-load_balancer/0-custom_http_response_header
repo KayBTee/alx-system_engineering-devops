@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# installs nginx with the following configurations;
+# *listens on port 80
+# *returns a page containing "holberton school" when queried
+# *at the root with a curl GET request
+# configures /redirect_me as a "301 moved permanently"
+# includes a custom 404 page containing "Ceci n'est pas une page'
+
+apt-get update
+apt-get install -y nginx
+
+mkdir /etc/nginx/html
+touch /etc/nginx/html/index.html
+echo "Hello World!" > /etc/nginx/html/index.html
+touch /etc/nginx/html/404.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+printf %s "server {
+	listen 80;
+	listen [::]:80 default_server;
+	add_header X-Served-By $HOSTNAME;
+
+	root   /etc/nginx/html;
+	index index.html index.htm;
+
+	location /redirect_me {
+		return 301 http://cuberule.com/;
+	}
+
+	error_page 404 /404.html;
+	location /404 {
+	  root /etc/nginx/html;
+	  internal;
+	}
+}" > /etc/nginx/sites-available/default
+
+service nginx restart
