@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# install load balancer
+
+sudo apt-get -y update
+sudo apt-get -y install haproxy
+sudo chown $USER:USER /etc/haproxy/haproxy.cfg
+
+echo "
+frontend kaybtee.tech
+    bind *:80
+    mode http
+    default_backend app
+
+backend app
+    balance roundrobin
+    server 445830-web-01 100.25.153.13:80 check
+    server 445830-web-02 3.90.83.33:80 check" >> /etc/haproxy/haproxy.cfg
+
+sudo service haproxy restart
